@@ -1,0 +1,20 @@
+http://localhost:4000
+http://localhost:5000
+https://ec2-65-0-139-120.ap-south-1.compute.amazonaws.com
+// remember to add AWS url too in allowable redirect URIs + =>  change in uploader function too
+sujanian785@gmail.com
+uploader
+
+client_secret_
+
+
+
+token1 my own channel
+token2 truesigma
+token3 rewindzap
+
+INSTALL - Mp4Box for linux
+pip install idm
+pip install --upgrade praw
+pip install pyautogui
+
