@@ -60,6 +60,7 @@ async function worker(){
     // MERGER
     console.log("MERGING VIDEOS ...")
     let result = await merger.mergeVideos(inputFiles);
+    console.log("Merged : ", result);
     if(!result){
         console.log("ERROR : RESULT from MERGER : ", result);
         return;

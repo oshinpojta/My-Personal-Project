@@ -1,7 +1,6 @@
 import requests,os
 import praw #reddit
 import re #regex
-import pyautogui
 import time
 import random
 
@@ -56,23 +55,22 @@ for i in hot:
         data = r.json()[0]
         video_url = data["data"]['children'][0]['data']['secure_media']['reddit_video']['fallback_url']
         audio_url = "https://v.redd.it/"+video_url.split("/")[3]+"/DASH_audio.mp4"
-        
-        with open("vids\\video.mp4","wb") as f:
+        with open(os.path.join("vids", "video.mp4"),"wb") as f:
             g = requests.get(video_url,stream=True)
             f.write(g.content)
-        with open("vids\\audio.mp3","wb") as f:
+        with open("vids/audio.mp3","wb") as f:
             g = requests.get(audio_url,stream=True)
             f.write(g.content)
         videooutputname = title
-        command = "ffmpeg -i vids\\video.mp4 -i vids\\audio.mp3 -c copy vids\\output"+str(count)+".mp4"
+        command = "ffmpeg -i "+os.path.join("vids", "video.mp4")+" -i "+os.path.join("vids", "audio.mp3")+" -c copy "+os.path.join("vids", "video.mp4")+""+str(count)+".mp4"
         os.system(command)
         # print("Created Output : "+i.title)
         file1 = open("output-names.txt", "a")  # append mode
         file1.write("output"+str(count)+".mp4,")
         file1.close()
-        pyautogui.sleep(5)
-        os.system("del /f /q vids\\video.mp4")
+        time.sleep(5)
+        os.system("del /f /q "+os.path.join("vids", "video.mp4"))
         print("deleted video.mp4.....")
-        pyautogui.sleep(5)
-        os.system("del /f /q vids\\audio.mp3")
+        time.sleep(5)
+        os.system("del /f /q "+os.path.join("vids", "video.mp4"))
         print("deleted audio.mp3.....")

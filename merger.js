@@ -78,6 +78,7 @@ exports.mergeVideos = async (inputFiles) => {
             }
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
+                resolve(stderr);
             }
             console.log(`stdout: ${stdout}`);
             resolve(true);
