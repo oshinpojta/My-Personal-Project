@@ -14,7 +14,7 @@ exports.getVideoInfo = async (inputFile) => {
             resolve(false);
             return
         }
-        ffmpeg.ffprobe(`vids\\${inputFile}`,function(err, metadata) {
+        ffmpeg.ffprobe(`${path.resolve("vids", inputFile)}`,function(err, metadata) {
             console.log(metadata);
             resolve(metadata);
         });
@@ -28,7 +28,7 @@ exports.setVideosResolution =  async (inputFile) => {
             return
         }
         console.log("\n//////////////////////////// SETTING RESOLUTION ///////////////////////////////////////")
-        let command = `ffmpeg -i vids\\${inputFile} -vf scale=1280:720 -preset slow -crf 18 videos\\${inputFile}`;
+        let command = `ffmpeg -i ${path.resolve("vids", inputFile)} -vf scale=1280:720 -preset slow -crf 18 ${path.resolve("videos", inputFile)}`;
         exec(command, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
@@ -51,7 +51,7 @@ exports.copyPasteFile =  async (inputFile) => {
             return
         }
         console.log("\n//////////////////////////// COPYING FILE ///////////////////////////////////////")
-        await fs_promise.copyFile(`vids\\${inputFile}`, `videos\\${inputFile}`);
+        await fs_promise.copyFile(`${path.resolve("vids", inputFile)}`, `${path.resolve("videos", inputFile)}`);
         resolve(true);
     })
 }
@@ -63,10 +63,10 @@ exports.mergeVideos = async (inputFiles) => {
             return
         }
 
-        let videoQuery = `videos\\${inputFiles[0]} `;
+        let videoQuery = `${path.resolve("videos", inputFiles[0])} `;
         videoQuery += `-cat beep.mp4 `;
         for(let i=1; i<inputFiles.length;i++){
-            videoQuery += `-cat videos\\${inputFiles[i]} `;
+            videoQuery += `-cat ${path.resolve("videos", inputFiles[i])} `;
             videoQuery += `-cat beep.mp4 `;
         }
 

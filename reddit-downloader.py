@@ -3,6 +3,7 @@ import praw #reddit
 import re #regex
 import pyautogui
 import time
+import random
 
 def create_reddit_object():
     reddit = praw.Reddit(client_id="XJ1vQ1MbsW7UMF0wczYvBw", 
@@ -14,13 +15,29 @@ def create_reddit_object():
 
 reddit = create_reddit_object()
 
-subred = reddit.subreddit("funny")
+subreddit_array = ["funny", "TikTokCringe", "WatchPeopleDieInside"] # "KidsAreFuckingStupid"
+# random_number = random.randint(0, len(subreddit_array))
+
+# Read Counter Number For Sub-Reddit
+subreddit_counter = open("subreddit_counter.txt","r+")
+subred_number = subreddit_counter.readline()
+subred_number = int(subred_number)
+subreddit_counter.close()
+print("Subred No. ", subred_number)
+# Update Counter Number
+subreddit_counter = open("subreddit_counter.txt","w")
+subreddit_counter.write( str((subred_number+1)%len(subreddit_array)))
+subreddit_counter.close()
+print("Downloading From SubRed : ",subreddit_array[subred_number])
+subred = reddit.subreddit(subreddit_array[subred_number])
 
 hot = subred.hot(limit = 20)
 new = subred.new(limit = 20)
 count = 0
 for i in hot:
-    count = count+1
+    if count >= 7 :
+        break
+    count = count+1 
     if(re.findall("^https://v.redd.it/",i.url)!=[]) :
         title = re.sub(r'\W+', '', i.title)
         if(len(title)>12):

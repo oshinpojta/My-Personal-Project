@@ -23,7 +23,6 @@ app.use("/", (req, res, next) => {
 
 
 async function worker(){
-
     //FPS EDITOR
     // await fps_editor.convertTo60fps(video_path1, "output.mp4");
     // return;
@@ -67,6 +66,7 @@ async function worker(){
     }
 
     // DELETING FILES NOT REQUIRED
+    console.log("/////////////////////// DELETING VIDEO CACHE /////////////////////////////");
     try{
         await fs_promise.unlink(path.resolve(__dirname, "output-names.txt"));
     }catch(error){
@@ -114,7 +114,7 @@ async function worker(){
     let emoji2 = ["😂", "😪", "🤯", "🤪", "😢", "🐵", "🐱", "🐷", "🤮", "😧", "😅", "♡", "❌"];
     let randomNumber2 = Math.floor((Math.random()*10)%emoji2.length);
     let title = `${emoji1[randomNumber1]} Random Funny/Weird Videos On Internet #${titleCount} ${emoji2[randomNumber2]}`;
-    let description = "#funny #reddit #funnyvideos #funny #funnymemes #memes #comedy #meme #memesdaily #dankmemes #tiktok #fun #lol #viral #follow #explorepage #instagram #love #trending #funnyshit #explore #jokes #humor #like #comedyvideos #instagood #followforfollowback #funnyvideo #lmao #laugh #video #funnymeme #funnyvideos #funnyvideosdaily #funnyvideosclips #pubgfunnyvideos #btsfunnyvideos #punjabifunnyvideos #telugufunnyvideos #tiktokfunnyvideos #funnyvideosv #indianfunnyvideos #leagueoflegendsfunnyvideos #funnyvideosclip #kannadafunnyvideos #afghanfunnyvideos #marathifunnyvideos #kevinhartfunnyvideos #dogfunnyvideos #bestfunnyvideos #funnyvideos2018 #funnyvideoshiphop #funnyvideos2019 #hindifunnyvideos #funnyvideosandmemes_ #naijafunnyvideos #funnyvideoslel #tamilfunnyvideos #desifunnyvideos #funnyvideosever #funnyvideostags #pakistanifunnyvideos #funnyvideoswithsuaven2g #blackfunnyvideos #funnyvideosmemes #funnyvideosinhindi #funnyvideoshd #kidsfunnyvideos #funnyvideos2020 #funnyvideosdownload #fortnitefunnyvideos #funnyvideos2017 #gaming #pcgaming #instagaming #retrogaming #onlinegaming #gamingmemes #gaminglife #gamingcommunity #gamingsetup #gamingpc #wargaming #tabletopgaming #gamingposts #gamingmeme #videogaming #youtubegaming #gamingphotography #gamingislife #mobilegaming #gamingclips #gamingroom #consolegaming #gamingchannel #gamingsetups #twitchgaming #fortnitegaming #gamingrig #boardgaming #gamingnews #gaminggear #gamingchair #xboxgaming #dagelangaming #gamingfolk #pcgaming101 #ps4gaming #pregaming #oldschoolgaming #pcgamingsetup #classicgaming";
+    let description = "#funny #viral #random #shorts #reddit #funnyvideos #funny #funnymemes #memes #comedy #meme #memesdaily #dankmemes #tiktok #fun #lol #viral #follow #explorepage #instagram #love #trending #funnyshit #explore #jokes #humor #like #comedyvideos #instagood #followforfollowback #funnyvideo #lmao #laugh #video #funnymeme #funnyvideos #funnyvideosdaily #funnyvideosclips #pubgfunnyvideos #btsfunnyvideos #punjabifunnyvideos #telugufunnyvideos #tiktokfunnyvideos #funnyvideosv #indianfunnyvideos #leagueoflegendsfunnyvideos #funnyvideosclip #kannadafunnyvideos #afghanfunnyvideos #marathifunnyvideos #kevinhartfunnyvideos #dogfunnyvideos #bestfunnyvideos #funnyvideos2018 #funnyvideoshiphop #funnyvideos2019 #hindifunnyvideos #funnyvideosandmemes_ #naijafunnyvideos #funnyvideoslel #tamilfunnyvideos #desifunnyvideos #funnyvideosever #funnyvideostags #pakistanifunnyvideos #funnyvideoswithsuaven2g #blackfunnyvideos #funnyvideosmemes #funnyvideosinhindi #funnyvideoshd #kidsfunnyvideos #funnyvideos2020 #funnyvideosdownload #fortnitefunnyvideos #funnyvideos2017 #gaming #pc";
     let tags = ""; //"gaming, food, movies";
     // let tagsArray = tags.split("#");
     // let keywords = "";
@@ -128,7 +128,8 @@ async function worker(){
     // }
     // console.log(keywords);
     const video_path = path.resolve(__dirname, "output.mp4");
-    uploader.uploadVideo(video_path, title, description, tags, obj.client_secret, obj.token_path);
+    console.log("UPLOADING TO YOUTUBE | Title : "+title);
+    uploader.uploadVideoToYoutube(video_path, title, description, tags, obj.client_secret, obj.token_path);
 
 }
 
@@ -138,16 +139,28 @@ async function setAPICallsCount(){
     try {
         return new Promise(async (resolve, reject) => {
             let data = await fs_promise.readFile(apiCallsCountFilePath, "utf-8");
+            let last_uploaded = await fs_promise.readFile("last_uploaded.txt", "utf-8");
+            let isNanLastUploaded = isNaN(last_uploaded);
             data = JSON.parse(data);
             let count = data.count;
-            if(data.count >= 6 ){
-                resolve(null);
+
+            if(data.count >= 6){
+                let current_date = new Date();
+                let last_uploaded_date = new Date(last_uploaded);
+                let difference = current_date.getTime() - last_uploaded_date.getTime();
+                let dayInMilli = 1000 * 60 * 60 * 24; // milliseconds * seconds * minutes * hours
+                if(Math.abs(difference) < dayInMilli){
+                    resolve(null);
+                }else{
+                    data.count = 0;
+                }
             }
             let file_number = Math.abs(Math.floor(count/6)) + 1;
             let client_secret_path = path.resolve(__dirname, "client_secrets", `client_secret_1.json`);
             let token_path = path.resolve(__dirname, "client_oauth_tokens", `client_oauth_token_4.json`);
             data.count++;
             await fs_promise.writeFile(apiCallsCountFilePath, JSON.stringify(data));
+            await fs_promise.writeFile("last_uploaded.txt", String(new Date().getTime()));
             console.log("API Calls Made : ", data.count);
             let obj = {
                 client_secret : client_secret_path,

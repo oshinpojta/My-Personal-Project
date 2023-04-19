@@ -24,8 +24,9 @@ let TOKEN_PATH = './' + 'client_oauth_token.json';
 let videoFilePath = null;
 const thumbFilePath = null;
 
-exports.uploadVideo = (video_path, title, description, tags, client_secret, token_path) => {
+exports.uploadVideoToYoutube = (video_path, title, description, tags, client_secret, token_path) => {
 
+  console.log(" inside uploadVideoToYoutube func /// ")
   videoFilePath = video_path;
   assert(fs.existsSync(videoFilePath))
   //assert(fs.existsSync(thumbFilePath))
@@ -49,8 +50,10 @@ exports.uploadVideo = (video_path, title, description, tags, client_secret, toke
  */
 function uploadVideo(auth, title, description, tags) {
   const service = google.youtube('v3')
+  console.log(" inside uploadVideo func /// ")
 
   service.videos.insert({
+    // timeout: 10000,
     auth: auth,
     part: 'snippet,status',
     requestBody: {
@@ -76,7 +79,8 @@ function uploadVideo(auth, title, description, tags) {
     }
     console.log(response.data)
     let uploaded_video_data = response.data;
-    console.log('Video uploaded. Uploading the thumbnail now.')
+    console.log('Video uploaded.')
+    // console.log('Uploading the thumbnail now.')
     // service.thumbnails.set({
     //   auth: auth,
     //   videoId: response.data.id,
@@ -91,6 +95,24 @@ function uploadVideo(auth, title, description, tags) {
     //   console.log(response.data)
     // })
   });
+  
+  // console.log("UPLOAD OBJ : ", req);
+  // var fileSize = fs.statSync(videoFilePath).size;
+
+  //   // show some progress
+  // var id = setInterval(function() {
+  //     var uploadedBytes = req.req.connection._bytesDispatched;
+  //     var uploadedMBytes = uploadedBytes / 1000000;
+  //     var progress = uploadedBytes > fileSize ? 100 : (uploadedBytes / fileSize) * 100;
+  //     process.stdout.clearLine();
+  //     process.stdout.cursorTo(0);
+  //     process.stdout.write(uploadedMBytes.toFixed(2) + ' MBs uploaded. ' +
+  //         progress.toFixed(2) + '% completed.');
+  //     if (progress === 100) {
+  //         process.stdout.write('\nDone uploading, waiting for response...\n');
+  //         clearInterval(id);
+  //     }
+  // }, 250);
 }
 
 /**
