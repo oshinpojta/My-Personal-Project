@@ -11,7 +11,7 @@ const { exec } = require("child_process");
 
 exports.downloadReddit = async () => {
 
-    const command = "py reddit-downloader.py";
+    const command = "python reddit-downloader.py";
     return new Promise((resolve, reject)=>{
         exec(command, (error, stdout, stderr) => {
             console.log("Terminal Output : ",stdout);
