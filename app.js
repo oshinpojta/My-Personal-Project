@@ -44,6 +44,28 @@ async function worker(){
     } catch (error) {
         console.log(error)
     }
+
+    let vids_directory = await fs_promise.readdir(path.resolve(__dirname, "vids"));
+    try {
+        for (const file of vids_directory) {
+            fs_promise.unlink(path.join(__dirname, "vids", file), (err) => {
+              if (err) throw err;
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+    let videos_directory = await fs_promise.readdir(path.resolve(__dirname, "videos"));
+    try {
+        for (const file of videos_directory) {
+            fs_promise.unlink(path.join(__dirname, "videos", file), (err) => {
+              if (err) throw err;
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
     
     console.log("STARTING REDDIT-DOWNLOADER ... ");
     await downloader.downloadReddit();
@@ -84,7 +106,7 @@ async function worker(){
         console.log(error);
     }
 
-    let vids_directory = await fs_promise.readdir(path.resolve(__dirname, "vids"));
+    vids_directory = await fs_promise.readdir(path.resolve(__dirname, "vids"));
     try {
         for (const file of vids_directory) {
             fs_promise.unlink(path.join(__dirname, "vids", file), (err) => {
@@ -95,7 +117,7 @@ async function worker(){
         console.log(error);
     }
 
-    let videos_directory = await fs_promise.readdir(path.resolve(__dirname, "videos"));
+    videos_directory = await fs_promise.readdir(path.resolve(__dirname, "videos"));
     try {
         for (const file of videos_directory) {
             fs_promise.unlink(path.join(__dirname, "videos", file), (err) => {
@@ -214,6 +236,6 @@ let minute = 1000*60;
 let hour = minute*60;
 let day = hour*24;
 
-worker();
-setInterval(worker, 7*day); // Youtube API free quota-cost per user is 1600 for 1 video insert (including error responses) / total available - 10000 :=> 6 api calls per day
+// worker();
+setInterval(worker, 5*day); // Youtube API free quota-cost per user is 1600 for 1 video insert (including error responses) / total available - 10000 :=> 6 api calls per day
 // !IMPORTANT - to get code for authorization :- URL of server should be registered in Credentials (in all of the projects) : dont try console logging since its waiting to be entered in the terminal
