@@ -69,8 +69,12 @@ exports.mergeVideos = async (inputFiles) => {
             videoQuery += `-cat ${path.resolve("videos", inputFiles[i])} `;
             videoQuery += `-cat beep.mp4 `;
         }
-
-        exec(`mp4box -force-cat -add ${videoQuery} output.mp4`, (error, stdout, stderr) => {
+        
+        let command = `mp4box -force-cat -add ${videoQuery} output.mp4`;
+        if(process.platform == "linux"){
+            command = `/usr/bin/MP4Box -force-cat -add ${videoQuery} output.mp4`;
+        }
+        exec(command , (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 resolve(false);

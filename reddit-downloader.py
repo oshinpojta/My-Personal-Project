@@ -58,11 +58,11 @@ for i in hot:
         with open(os.path.join("vids", "video.mp4"),"wb") as f:
             g = requests.get(video_url,stream=True)
             f.write(g.content)
-        with open("vids/audio.mp3","wb") as f:
+        with open(os.path.join("vids", "audio.mp3"),"wb") as f:
             g = requests.get(audio_url,stream=True)
             f.write(g.content)
         videooutputname = title
-        command = "ffmpeg -i "+os.path.join("vids", "video.mp4")+" -i "+os.path.join("vids", "audio.mp3")+" -c copy "+os.path.join("vids", "video.mp4")+""+str(count)+".mp4"
+        command = "ffmpeg -i "+os.path.join("vids", "video.mp4")+" -i "+os.path.join("vids", "audio.mp3")+" -c copy "+os.path.join("vids", "output")+str(count)+".mp4"
         os.system(command)
         # print("Created Output : "+i.title)
         file1 = open("output-names.txt", "a")  # append mode
