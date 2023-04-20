@@ -56,6 +56,22 @@ exports.copyPasteFile =  async (inputFile) => {
     })
 }
 
+exports.deleteAllVideos =  async () => {
+    let command = `rm vids/* videos/*`;
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                resolve(false);
+                return;
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`);
+            }
+            console.log(`stdout: ${stdout}`);
+            resolve(true);
+        });
+}
+
 exports.mergeVideos = async (inputFiles) => {
     return new Promise(async (resolve, reject) => {
         if(inputFiles.length <= 0){

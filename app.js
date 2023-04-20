@@ -6,6 +6,7 @@ const fps_editor = require("./fps-editor");
 const fs_promise = require("fs/promises");
 const path = require("path");
 const cors = require("cors");
+const {exec} = require("child_process");
 
 
 const apiCallsCountFilePath = path.resolve(__dirname, "api-call-count.txt");
@@ -19,7 +20,8 @@ app.use(cors());
 
 app.get("/run-reddit",async (req, res, next) => {
     console.log("API Call Made to Run Reddit Downloader ...");
-    await worker();
+    worker();
+    res.json({ success : true});
 })
 
 app.use("/", (req, res, next) => {
@@ -37,6 +39,8 @@ async function worker(){
     console.log("Trying to delete Previous output.mp4 file ... ");
     try {
         await fs_promise.unlink(path.resolve(__dirname, "output.mp4"));
+        await merger.deleteAllVideos();
+
     } catch (error) {
         console.log(error)
     }
