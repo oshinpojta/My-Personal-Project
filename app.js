@@ -16,6 +16,12 @@ app.listen(4000);
 app.use(express.json());
 app.use(cors());
 
+
+app.get("/run-reddit",async (req, res, next) => {
+    console.log("API Call Made to Run Reddit Downloader ...");
+    await worker();
+})
+
 app.use("/", (req, res, next) => {
     let code = req.query.code;
     res.json({ success : true, data : req.query });
