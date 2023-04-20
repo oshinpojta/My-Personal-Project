@@ -237,5 +237,5 @@ let hour = minute*60;
 let day = hour*24;
 
 // worker();
-setInterval(worker, 5*day); // Youtube API free quota-cost per user is 1600 for 1 video insert (including error responses) / total available - 10000 :=> 6 api calls per day
+setInterval(worker, 4*day); // Youtube API free quota-cost per user is 1600 for 1 video insert (including error responses) / total available - 10000 :=> 6 api calls per day
 // !IMPORTANT - to get code for authorization :- URL of server should be registered in Credentials (in all of the projects) : dont try console logging since its waiting to be entered in the terminal

@@ -14,7 +14,7 @@ def create_reddit_object():
 
 reddit = create_reddit_object()
 
-subreddit_array = ["funny", "TikTokCringe", "WatchPeopleDieInside"] # "KidsAreFuckingStupid"
+subreddit_array = ["funny", "TikTokCringe", "WatchPeopleDieInside", "Unexpected", "ContagiousLaughter"] # "KidsAreFuckingStupid"
 # random_number = random.randint(0, len(subreddit_array))
 
 # Read Counter Number For Sub-Reddit
@@ -33,7 +33,7 @@ subred = reddit.subreddit(subreddit_array[subred_number])
 hot = subred.hot(limit = 20)
 new = subred.new(limit = 20)
 count = 0
-for i in hot:
+for i in new:
     if count >= 7 :
         break
     count = count+1 
