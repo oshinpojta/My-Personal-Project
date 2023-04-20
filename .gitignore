@@ -1,2 +1,4 @@
 node_modules/
 ffmpeg-master/
+subreddit_counter.txt
+title-count.txt
